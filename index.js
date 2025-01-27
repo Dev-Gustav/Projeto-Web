@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="Author = " content="Golias-Dev">
-    <link rel="stylesheet" href="style.css">
+    <meta name="author" content="Gustavo-Dev">
+    <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
 
     <!-- GOOGLE FONTS -->
@@ -15,19 +15,25 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-    <title>Gustavo Dev</title>
+    <title>diretório de links</title>
 </head>
 <body>
+    <!-- Vídeo de fundo -->
+    <video autoplay loop muted id="background-video" autoplay muted loop playsinline>
+        <source src="./video/backgraund.mp4" type="video/mp4">
+        Seu navegador não suporta este formato de vídeo.
+        <img src="./img/backgraund.gif" alt="Imagem de fundo">
+    </video>
+
     <div class="container">
         <header>
-					<img src="./img/foto logo 2.jpeg" alt="foto de perfil" oncontextmenu="return false;" />
+            <img src="./img/foto logo 2.jpeg" alt="foto de perfil" oncontextmenu="return false;" />
             <h1>@Luisfernnandes__</h1>
-            <p>Luis Gustavo Fernandes Cardoso | UX e UI Designer | Dev<br></p>
+            <p> Luis Gustavo Fernandes Cardoso | Dev | UX e UI Designer 
+            </p>
         </header>
 
         <section class="botoes-links">
-
-							
             <a href="https://www.linkedin.com/in/luis-gustavo-fernandes-cardoso-726bb12a7/" target="_blank" class="link">
                 <button class="degrade">
                     <span>LinkedIn</span>
@@ -59,13 +65,17 @@
 								<a href="https://www.instagram.com/Luisfernnandes__/" class="btn-footer " target="_blank"><i class="bi bi-instagram"></i></a>
 								<a href="https://github.com/Golias-dev" class="btn-footer " target="_blank"><i class="bi bi-github"></i></a>
 								<a href="https://vsco.co/lgustfer/gallery" class="btn-footer " target="_blank"><i class="bi bi-camera"></i></a>
-				</div><!--container-->
+            </div><!--container-->
         </section><!--botoes-links-->
-  <!-- Footer -->
-  <footer>
-    <p>Desenvolvido por <strong>Gustavo dev&copy;</strong></p>
-  </footer>
-			</div>
-				
+        
+        <!-- Botão de mute -->
+
+        
+
+        <!-- Footer -->
+        <footer>
+            <p>Desenvolvido por <strong><a href="https://www.instagram.com/Luisfernnandes__/">Gustavo dev&copy;</a></strong></p>
+        </footer>
+    </div> <!--container-->
 </body>
 </html>
