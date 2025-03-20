@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "public": "public",
+    "site": "dev-gustavo",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
