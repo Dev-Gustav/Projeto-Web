@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Treino de Academia</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/a2d04b9b90.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <header class="text-center">
+            <h1>Ficha de Treino de Academia</h1>
+            <p>Acompanhe seu progresso e registre seus treinos</p>
+        </header>
+
+        <!-- Ícones de navegação -->
+        <div class="icon-grid d-flex justify-content-center">
+            <div id="workout-icon" class="icon-card pink mx-2 text-center" style="cursor: pointer;">
+                <span class="fs-1">💪</span>
+                <h2>Treinos</h2>
+            </div>
+            <div id="nutrition-icon" class="icon-card blue mx-2 text-center" style="cursor: pointer;">
+                <span class="fs-1">🍏</span>
+                <h2>Nutrição</h2>
+            </div>
+            <div id="progress-icon" class="icon-card green mx-2 text-center" style="cursor: pointer;">
+                <span class="fs-1">📈</span>
+                <h2>Progresso</h2>
+            </div>
+            <div id="measurements-icon" class="icon-card yellow mx-2 text-center" style="cursor: pointer;">
+                <span class="fs-1">📏</span>
+                <h2>Medições</h2>
+            </div>
+            <div id="motivation-icon" class="icon-card red mx-2 text-center" style="cursor: pointer;">
+                <span class="fs-1">📣</span>
+                <h2>Motivação</h2>
+            </div>
+        </div>
+
+        <!-- Seção de Treinos -->
+        <section id="workout-section" class="section hidden app-section">
+            <h2><i class="fas fa-dumbbell"></i> Treinos</h2>
+            <form id="workout-form" class="form-card">
+                <label for="exercise-name">Nome do Exercício
+                    <input type="text" id="exercise-name" required>
+                </label>
+                <label for="sets">Séries
+                    <input type="number" id="sets" required>
+                </label>
+                <label for="reps">Repetições
+                    <input type="number" id="reps" required>
+                </label>
+                <label for="workout-type">Divisão de Treino
+                    <select id="workout-type" required>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                </label>
+                <button type="submit">Registrar Exercício</button>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Exercício</th><th>Séries</th><th>Repetições</th><th>Divisão</th><th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="workout-table"></tbody>
+            </table>
+        </section>
+
+        <!-- Seção de Nutrição -->
+        <section id="nutrition-section" class="section hidden app-section">
+            <h2><i class="fas fa-apple-alt"></i> Nutrição</h2>
+            <form id="nutrition-form" class="form-card">
+                <label for="food-name">Nome do Alimento
+                    <input type="text" id="food-name" required>
+                </label>
+                <label for="quantity">Quantidade (g)
+                    <input type="number" id="quantity" required>
+                </label>
+                <label for="calories">Calorias
+                    <input type="number" id="calories" required>
+                </label>
+                <label for="day-of-week">Dia da Semana
+                    <select id="day-of-week" required>
+                        <option value="Segunda-feira">Segunda-feira</option>
+                        <option value="Terça-feira">Terça-feira</option>
+                        <option value="Quarta-feira">Quarta-feira</option>
+                        <option value="Quinta-feira">Quinta-feira</option>
+                        <option value="Sexta-feira">Sexta-feira</option>
+                        <option value="Sábado">Sábado</option>
+                        <option value="Domingo">Domingo</option>
+                    </select>
+                </label>
+                <button type="submit">Registrar Alimento</button>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Alimento</th><th>Quantidade</th><th>Calorias</th><th>Dia da Semana</th><th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="nutrition-table"></tbody>
+            </table>
+        </section>
+
+        <!-- Seção de Medições -->
+        <section id="measurements-section" class="section hidden app-section">
+            <h2><i class="fas fa-ruler-combined"></i> Medições Corporais</h2>
+            <form id="measurements-form" class="form-card">
+                <label for="chest">Peito (cm)
+                    <input type="number" id="chest" required>
+                </label>
+                <label for="waist">Cintura (cm)
+                    <input type="number" id="waist" required>
+                </label>
+                <label for="hips">Quadril (cm)
+                    <input type="number" id="hips" required>
+                </label>
+                <label for="arms">Braços (cm)
+                    <input type="number" id="arms" required>
+                </label>
+                <label for="thighs">Coxas (cm)
+                    <input type="number" id="thighs" required>
+                </label>
+                <button type="submit">Registrar Medições</button>
+            </form>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data</th><th>Peito</th><th>Cintura</th><th>Quadril</th><th>Braços</th><th>Coxas</th><th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="measurements-table"></tbody>
+            </table>
+        </section>
+
+        <!-- Botões de exportação em PDF -->
+        <div class="text-center my-3">
+            <button id="export-workout-pdf" class="btn btn-success">📄 Exportar Treino em PDF</button>
+            <button id="export-nutrition-pdf" class="btn btn-info">📄 Exportar Nutrição em PDF</button>
+            <button id="export-measurements-pdf" class="btn btn-warning">📄 Exportar Medições em PDF</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
