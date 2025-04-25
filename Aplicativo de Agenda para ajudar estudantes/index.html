@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4F46E5">
+  <title>Agenda do Estudante</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+    }
+    input, select, button {
+      transition: all 0.2s;
+    }
+    button:hover {
+      transform: scale(1.02);
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .tab-button.active {
+      background-color: #4F46E5;
+      color: white;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-100 to-white text-gray-800">
+  <div class="min-h-screen flex flex-col items-center p-4">
+    <div class="w-full max-w-sm md:max-w-2xl lg:max-w-4xl">
+      <h1 class="text-3xl font-bold text-indigo-700 text-center mb-4">📘 Agenda do Estudante</h1>
+
+      <!-- Botões das Abas -->
+      <div class="flex flex-wrap justify-center gap-2 mb-4">
+        <button class="tab-button px-4 py-2 rounded-full bg-indigo-100 text-indigo-700" onclick="showTab('meta')">🎯 Meta</button>
+        <button class="tab-button px-4 py-2 rounded-full bg-indigo-100 text-indigo-700" onclick="showTab('materias')">📚 Matérias</button>
+        <button class="tab-button px-4 py-2 rounded-full bg-indigo-100 text-indigo-700" onclick="showTab('atividade')">✍️ Atividade</button>
+        <button class="tab-button px-4 py-2 rounded-full bg-indigo-100 text-indigo-700" onclick="showTab('ajuda')">💡 Vídeos</button>
+      </div>
+
+      <!-- Seções das Abas -->
+      <div id="meta" class="tab-content active">
+        <h2 class="text-xl font-semibold text-indigo-700 mb-2">Definir Meta Diária</h2>
+        <div class="flex gap-2 mb-2">
+          <input id="metaInput" type="number" placeholder="Ex: 2" class="flex-1 px-3 py-2 border rounded">
+          <button onclick="definirMeta()" class="bg-indigo-600 text-white px-4 py-2 rounded">Definir</button>
+        </div>
+        <p id="metaTexto" class="text-gray-600 text-sm">Nenhuma meta definida.</p>
+        <table class="w-full mt-4 text-sm text-center">
+          <thead>
+            <tr class="bg-indigo-200">
+              <th class="p-2">Dia</th>
+              <th class="p-2">Horas</th>
+              <th class="p-2">Status</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaStatus"></tbody>
+        </table>
+      </div>
+
+      <div id="materias" class="tab-content">
+        <h2 class="text-xl font-semibold text-indigo-700 mb-2">Gerenciar Matérias</h2>
+        <div class="flex gap-2 mb-2">
+          <input id="novaMateriaInput" placeholder="Nova matéria" class="flex-1 px-3 py-2 border rounded">
+          <button onclick="adicionarMateria()" class="bg-green-600 text-white px-4 py-2 rounded">Adicionar</button>
+        </div>
+        <div class="flex gap-2">
+          <select id="removerMateriaInput" class="flex-1 px-3 py-2 border rounded"></select>
+          <button onclick="removerMateria()" class="bg-red-600 text-white px-4 py-2 rounded">Remover</button>
+        </div>
+      </div>
+
+      <div id="atividade" class="tab-content">
+        <h2 class="text-xl font-semibold text-indigo-700 mb-2">Nova Atividade</h2>
+        <input id="atividadeInput" placeholder="Descrição" class="w-full mb-2 px-3 py-2 border rounded">
+        <select id="materiaInput" class="w-full mb-2 px-3 py-2 border rounded"></select>
+        <input id="lembreteInput" type="datetime-local" class="w-full mb-2 px-3 py-2 border rounded">
+        <select id="diaAtividadeInput" class="w-full mb-2 px-3 py-2 border rounded">
+          <option value="Segunda">Segunda</option>
+          <option value="Terça">Terça</option>
+          <option value="Quarta">Quarta</option>
+          <option value="Quinta">Quinta</option>
+          <option value="Sexta">Sexta</option>
+          <option value="Sábado">Sábado</option>
+          <option value="Domingo">Domingo</option>
+        </select>
+        <button onclick="adicionarAtividade()" class="bg-indigo-600 text-white w-full py-2 rounded">Adicionar à Agenda</button>
+      </div>
+
+      <div id="ajuda" class="tab-content">
+        <h2 class="text-xl font-semibold text-indigo-700 mb-2">Vídeo Aulas</h2>
+        <select id="materiaSelect" class="w-full mb-2 px-3 py-2 border rounded" onchange="buscarVideos()">
+          <option value="">Escolha uma matéria</option>
+          <option value="Matemática">Matemática</option>
+          <option value="Português">Português</option>
+        </select>
+        <div id="listaVideos" class="text-indigo-700 space-y-1"></div>
+        <div id="videoIA" class="text-indigo-700 space-y-1 mt-4"></div>
+      </div>
+
+      <div class="bg-white mt-6 shadow-md rounded-xl p-4">
+        <h2 class="text-xl font-semibold text-indigo-700 mb-2">📅 Agenda Semanal</h2>
+        <div class="text-right mb-2">
+          <button onclick="gerarPDF()" class="text-sm text-indigo-600 underline">📄 Gerar PDF</button>
+        </div>
+        <div id="agendaSemana" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+      </div>
+
+      <div class="bg-white mt-4 shadow-md rounded-xl p-4">
+        <h2 class="text-xl font-semibold text-indigo-700 mb-2">📊 Progresso</h2>
+        <canvas id="progressChart" height="100"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let materias = ["Matemática", "Português"];
+    let atividadesSemana = { 'Segunda': [], 'Terça': [], 'Quarta': [], 'Quinta': [], 'Sexta': [], 'Sábado': [], 'Domingo': [] };
+    let metaDiaria = 0;
+    let horasEstudadas = [0, 0, 0, 0, 0, 0, 0];
+
+    const dias = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+
+    function showTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tab).classList.add('active');
+      document.querySelector(`[onclick="showTab('${tab}')"]`).classList.add('active');
+    }
+
+    function definirMeta() {
+      const valor = parseInt(document.getElementById("metaInput").value);
+      if (!isNaN(valor)) {
+        metaDiaria = valor;
+        atualizarTabelaStatus();
+      }
+    }
+
+    function atualizarTabelaStatus() {
+      const tabela = document.getElementById("tabelaStatus");
+      tabela.innerHTML = '';
+      dias.forEach((dia, i) => {
+        const status = horasEstudadas[i] >= metaDiaria ? '✅' : '❌';
+        tabela.innerHTML += `<tr><td class="p-2">${dia}</td><td class="p-2">${horasEstudadas[i]}</td><td class="p-2">${status}</td></tr>`;
+      });
+    }
+
+    function renderMaterias() {
+      const selects = [document.getElementById("materiaInput"), document.getElementById("removerMateriaInput")];
+      selects.forEach(sel => {
+        sel.innerHTML = '';
+        materias.forEach(m => {
+          sel.innerHTML += `<option value="${m}">${m}</option>`;
+        });
+      });
+    }
+
+    function adicionarMateria() {
+      const nova = document.getElementById("novaMateriaInput").value;
+      if (nova && !materias.includes(nova)) {
+        materias.push(nova);
+        renderMaterias();
+      }
+    }
+
+    function removerMateria() {
+      const val = document.getElementById("removerMateriaInput").value;
+      materias = materias.filter(m => m !== val);
+      renderMaterias();
+    }
+
+    function adicionarAtividade() {
+      const nome = document.getElementById("atividadeInput").value;
+      const materia = document.getElementById("materiaInput").value;
+      const lembrete = document.getElementById("lembreteInput").value;
+      const diaSelecionado = document.getElementById("diaAtividadeInput").value;
+
+      if (nome && materia && lembrete && diaSelecionado) {
+        if (diaSelecionado === 'Sábado' || diaSelecionado === 'Domingo') {
+          const confirmacao = confirm(`Você realmente deseja adicionar atividades para o ${diaSelecionado}?`);
+          if (!confirmacao) return;
+        }
+
+        const dataAtividade = new Date(lembrete);
+        const horarioAtividade = dataAtividade.toLocaleString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+        atividadesSemana[diaSelecionado].push(`${materia}: ${nome} ⏰ ${horarioAtividade}`);
+        horasEstudadas[dias.indexOf(diaSelecionado)] += 1;
+        atualizarTabelaStatus();
+        atualizarAgenda();
+      } else {
+        alert("Preencha todos os campos para adicionar a atividade.");
+      }
+    }
+
+    function atualizarAgenda() {
+      const agenda = document.getElementById("agendaSemana");
+      agenda.innerHTML = '';
+      dias.forEach((dia, i) => {
+        if (dia === 'Sábado' || dia === 'Domingo') {
+          agenda.innerHTML += `<div class="p-3 bg-gray-100 rounded-lg"><h3 class="font-semibold">${dia} (Facultativo)</h3></div>`;
+        } else {
+          const tarefas = atividadesSemana[dia].map(t => `<li class='text-sm'>📌 ${t}</li>`).join('') || '<li class="text-sm text-gray-500">Nenhuma atividade</li>';
+          agenda.innerHTML += `<div class="bg-indigo-50 p-3 rounded-lg shadow-sm"><h3 class="font-semibold text-indigo-600 mb-1">${dia}</h3><ul>${tarefas}</ul></div>`;
+        }
+      });
+    }
+
+    function buscarVideos() {
+      const materia = document.getElementById("materiaSelect").value;
+      const lista = document.getElementById("listaVideos");
+      const videoIA = document.getElementById("videoIA");
+      lista.innerHTML = '';
+      videoIA.innerHTML = '';
+
+      if (materia) {
+        lista.innerHTML = '<li class="text-indigo-700">Carregando vídeos...</li>';
+
+        // Simulando uma resposta de IA para sugerir vídeos
+        setTimeout(() => {
+          if (materia === "Matemática") {
+            videoIA.innerHTML = `
+              <h3 class="font-semibold">Vídeos sugeridos pela IA:</h3>
+              <ul>
+                <li><a href="https://youtu.be/3vq2mn3ewwQ" class="underline" target="_blank">Introdução à Álgebra</a></li>
+                <li><a href="https://youtu.be/7aWYmSbS7Lg" class="underline" target="_blank">Equações Lineares</a></li>
+              </ul>`;
+          } else if (materia === "Português") {
+            videoIA.innerHTML = `
+              <h3 class="font-semibold">Vídeos sugeridos pela IA:</h3>
+              <ul>
+                <li><a href="https://youtu.be/In4eHqVe_RI" class="underline" target="_blank">Análise Sintática</a></li>
+                <li><a href="https://youtu.be/Y0L85UqllEk" class="underline" target="_blank">Concordância Verbal</a></li>
+              </ul>`;
+          }
+        }, 1000);
+      }
+    }
+
+    function gerarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(14);
+      doc.text("Agenda Semanal", 10, 10);
+      let y = 20;
+      dias.forEach(dia => {
+        const atividades = atividadesSemana[dia].join("\n") || "Nenhuma atividade";
+        doc.text(`${dia}:`, 10, y);
+        y += 6;
+        doc.text(atividades, 12, y);
+        y += atividadesSemana[dia].length * 6 + 6;
+      });
+      doc.save("agenda-semanal.pdf");
+    }
+
+    renderMaterias();
+    atualizarAgenda();
+    const ctx = document.getElementById("progressChart");
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: dias,
+        datasets: [{
+          label: 'Horas Estudadas',
+          data: horasEstudadas,
+          backgroundColor: '#4F46E5'
+        }]
+      },
+      options: { scales: { y: { beginAtZero: true } } }
+    });
+  </script>
+</body>
+</html>
